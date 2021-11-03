@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000
 
 // need instance of express, don't short circuit
 const app = express();
-const sessionsRouter = express.Router();
+const sessionsRouter = require('./src/views/routers/sessionsRouter.js');
 
 // use is middleware - morgan combined all info. tiny 
 app.use(morgan('tiny'));
@@ -23,30 +23,12 @@ app.use(express.static(path.join(__dirname, '/public/')))
 app.set('views', "./src/views");
 app.set('view engine', 'ejs');
 
-//write router code
-
-sessionsRouter.route('/')
-    .get((req, res) => {
-        res.render('sessions', {
-            sessions,
-        });
-    })
-    
-
-    //parameter
-sessionsRouter.route('/:id')
-    .get((req, res)=> {
-        const id = req.params.id
-        res.render("session", {
-            session: sessions[id],
-        })
-    })
-app.use('/sessions', sessionsRouter);
+app.use('/sessions', sessionsRouter)
 
 // express is series of route -> function 
 app.get('/', (req, res) => {
-    res.render('index', {title: 'Globomantics'})
-} )
+    res.render('index', { title: 'Globomantics', data: ['a', 'b', 'c'] });
+  });
 
 /* listen on port with callback
  dont want to use console.log, use debug instead
