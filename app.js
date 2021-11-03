@@ -27,20 +27,19 @@ app.set('view engine', 'ejs');
 
 sessionsRouter.route('/')
     .get((req, res) => {
-        res.render('sessions', {sessions:[
-            {title: 'Session 1', description: 'This is session 1'},
-            {title: 'Session 2', description: 'This is session 2'},
-            {title: 'Session 3', description: 'This is session 3'},
-            {title: 'Session 4', description: 'This is session 4'},
-
-        ]})
+        res.render('sessions', {
+            sessions,
+        });
     })
+    
 
     //parameter
 sessionsRouter.route('/:id')
     .get((req, res)=> {
         const id = req.params.id
-        res.send("hello single sessions" + id)
+        res.render("session", {
+            session: sessions[id],
+        })
     })
 app.use('/sessions', sessionsRouter);
 
