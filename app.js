@@ -11,16 +11,38 @@ const PORT = process.env.PORT || 3000
 
 // need instance of express, don't short circuit
 const app = express();
+const sessionsRouter = express.Router();
 
 // use is middleware - morgan combined all info. tiny 
 app.use(morgan('tiny'));
 
 //static file allows serving up to browser - telling to look in "public" directory
-//this will look for index.html, with no index.html, will serve index.ejs
+//this will look for index.html, with no index.html, will move onto index.ejs
 app.use(express.static(path.join(__dirname, '/public/')))
 
 app.set('views', "./src/views");
 app.set('view engine', 'ejs');
+
+//write router code
+
+sessionsRouter.route('/')
+    .get((req, res) => {
+        res.render('sessions', {sessions:[
+            {title: 'Session 1', description: 'This is session 1'},
+            {title: 'Session 2', description: 'This is session 2'},
+            {title: 'Session 3', description: 'This is session 3'},
+            {title: 'Session 4', description: 'This is session 4'},
+
+        ]})
+    })
+
+    //parameter
+sessionsRouter.route('/:id')
+    .get((req, res)=> {
+        const id = req.params.id
+        res.send("hello single sessions" + id)
+    })
+app.use('/sessions', sessionsRouter);
 
 // express is series of route -> function 
 app.get('/', (req, res) => {
